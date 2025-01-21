@@ -1,12 +1,58 @@
 <head>
   <style>
-    body { margin: 0; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden; /* Prevent scrolling */
+    }
+
+    #loom-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 600px; /* Increased width for a larger video */
+      height: 338px; /* Adjusted height to maintain aspect ratio */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    #loom-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #3d-graph {
+      width: 100vw;
+      height: 100vh;
+      background-color: #121212;
+    }
   </style>
   <script src="//unpkg.com/3d-force-graph"></script>
 </head>
 
 <body>
-  <div id="3d-graph" style="width: 100vw; height: 100vh;"></div>
+  <div id="3d-graph"></div>
+
+  <div id="loom-container">
+    <iframe
+      src="https://www.loom.com/embed/e84c01b119304f8e96ed9b381092d6e2?autoplay=1&sid=8eaa4e62-9e4a-452a-b4fc-43c49200fa32"
+      frameborder="0"
+      webkitallowfullscreen
+      mozallowfullscreen
+      allowfullscreen
+      autoplay=true
+      hideEmbedTopBar=true
+      hide_title=true
+      hide_owner=true
+      hide_speed=true
+      muted="false"
+      hide_share=true
+      style="width: 100%; height: 100%; border: none;">
+    </iframe>
+  </div>
 
   <script type="module">
     import SpriteText from "https://esm.sh/three-spritetext";
@@ -16,17 +62,32 @@
         .nodeAutoColorBy('group')
         .nodeThreeObject(node => {
           const sprite = new SpriteText(node.id);
-          sprite.material.depthWrite = false; // make sprite background transparent
+          sprite.material.depthWrite = false;
           sprite.color = node.color;
-          sprite.textHeight = 8; // Adjust text height
+          sprite.textHeight = 8;
           return sprite;
         });
 
-    // Spread nodes a little wider
-    Graph.d3Force('charge').strength(-300); // Increase repulsion between nodes
-    Graph.d3Force('link').distance(100); // Adjust link distance for more spacing
-
-    // Optionally, tweak gravity to make the graph sparser
+    Graph.d3Force('charge').strength(-300);
+    Graph.d3Force('link').distance(100);
     Graph.d3Force('center').strength(0.05);
+
+    let angle = 0;
+    const rotationSpeed = 0.001;
+
+    (function animate() {
+      angle += rotationSpeed;
+      const { x, y, z } = Graph.cameraPosition();
+      Graph.cameraPosition(
+        {
+          x: x * Math.cos(rotationSpeed) - z * Math.sin(rotationSpeed),
+          z: z * Math.cos(rotationSpeed) + x * Math.sin(rotationSpeed),
+          y: y
+        },
+        Graph.camera().lookAt
+      );
+      requestAnimationFrame(animate);
+    })();
   </script>
 </body>
+
