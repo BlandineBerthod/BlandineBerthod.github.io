@@ -2,92 +2,121 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
       overflow: hidden; /* Prevent scrolling */
     }
 
-    #loom-container {
+    /* Graph container */
+    #3d-graph {
+      width: 80vw; /* Graph takes up 80% of the screen width */
+      height: 100vh; /* Full height */
+      background-color: #121212;
+      float: right; /* Push the graph to the right */
+    }
+
+    /* Video container */
+    #video-container {
       position: absolute;
-      bottom: 20px;
-      left: 20px;
-      width: 600px; /* Increased width for a larger video */
-      height: 338px; /* Adjusted height to maintain aspect ratio */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      border-radius: 8px;
-      overflow: hidden;
+      bottom: 15px; /* Distance from the bottom */
+      left: 15px; /* Distance from the left */
+      width: 800px; /* Larger video width */
+      height: auto;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      border-radius: 30px;
+      background: #000;
       z-index: 10;
     }
 
-    #loom-container iframe {
+    /* Style for the video */
+    #video-container video {
       width: 100%;
-      height: 100%;
-      border: none;
+      height: auto;
     }
 
-    #3d-graph {
-      width: 100vw;
-      height: 100vh;
-      background-color: #121212;
+    /* Sound consent button */
+    #sound-consent {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      width: calc(100% - 20px);
+      text-align: center;
+      z-index: 20;
+    }
+
+    #sound-consent button {
+      padding: 15px 25px;
+      background-color: #00bcd4;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
   </style>
   <script src="//unpkg.com/3d-force-graph"></script>
 </head>
 
 <body>
+  <!-- Graph container -->
   <div id="3d-graph"></div>
 
-  <div id="loom-container">
-    <iframe
-      src="https://www.loom.com/embed/e84c01b119304f8e96ed9b381092d6e2?autoplay=1&sid=8eaa4e62-9e4a-452a-b4fc-43c49200fa32"
-      frameborder="0"
-      webkitallowfullscreen
-      mozallowfullscreen
-      allowfullscreen
-      autoplay=true
-      hideEmbedTopBar=true
-      hide_title=true
-      hide_owner=true
-      hide_speed=true
-      muted="false"
-      hide_share=true
-      style="width: 100%; height: 100%; border: none;">
-    </iframe>
+  <!-- Video container -->
+  <div id="video-container">
+    <video id="my-video" autoplay loop muted>
+      <source src="./Video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div id="sound-consent">
+      <button id="enable-sound">Enable Sound</button>
+    </div>
   </div>
 
   <script type="module">
     import SpriteText from "https://esm.sh/three-spritetext";
 
+    // Initialize 3D graph
     const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
         .jsonUrl('./data.json')
         .nodeAutoColorBy('group')
         .nodeThreeObject(node => {
           const sprite = new SpriteText(node.id);
-          sprite.material.depthWrite = false;
+          sprite.material.depthWrite = false; // Make sprite transparent
           sprite.color = node.color;
-          sprite.textHeight = 8;
+          sprite.textHeight = 8; // Text height
           return sprite;
         });
 
-    Graph.d3Force('charge').strength(-300);
-    Graph.d3Force('link').distance(100);
-    Graph.d3Force('center').strength(0.05);
+    // Spread nodes
+    Graph.d3Force('charge').strength(-300); // Increase repulsion
+    Graph.d3Force('link').distance(100); // Adjust link distance
+    Graph.d3Force('center').strength(0.05); // Center strength
 
+    // Add rotation animation
     let angle = 0;
     const rotationSpeed = 0.001;
 
     (function animate() {
       angle += rotationSpeed;
-      const { x, y, z } = Graph.cameraPosition();
+      const { x, y, z } = Graph.cameraPosition(); // Get camera position
       Graph.cameraPosition(
         {
           x: x * Math.cos(rotationSpeed) - z * Math.sin(rotationSpeed),
           z: z * Math.cos(rotationSpeed) + x * Math.sin(rotationSpeed),
           y: y
         },
-        Graph.camera().lookAt
+        Graph.camera().lookAt // Keep looking at graph center
       );
-      requestAnimationFrame(animate);
+      requestAnimationFrame(animate); // Loop animation
     })();
+
+    // Enable sound button
+    const video = document.getElementById('my-video');
+    const enableSoundButton = document.getElementById('enable-sound');
+    const soundConsent = document.getElementById('sound-consent');
+
+    enableSoundButton.addEventListener('click', () => {
+      video.muted = false; // Unmute video
+      soundConsent.style.display = 'none'; // Hide consent button
+    });
   </script>
 </body>
-
