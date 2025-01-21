@@ -1,6 +1,6 @@
 {
   "nodes": [
-    { "id": "The debate rages on: was the Paris restaurant crash an attack or a tragic accident?", "group": "Topic", "color": "tomato1" },
+    { "id": "The debate rages on: was the Paris restaurant crash an attack or a tragic accident?", "group": "Topic", "color": "orangered" },
     { "id": "Terrorist attack", "group": "Narrative", "color": "white"},
     { "id": "Drunk or impaired driver", "group": "Narrative", "color": "white" },
     { "id": "Arrested driver and aftermath", "group": "Narrative", "color": "white" },
