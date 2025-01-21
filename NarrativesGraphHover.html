@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver hits terrasse of parisian restaurant.</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r110/three.min.js"></script>
+  <script src="https://unpkg.com/3d-force-graph"></script>
+</head>
+<body>
+  <script>
+    const data = {
+      nodes: [
+        { id: "The debate rages on: was the Paris restaurant crash an attack or a tragic accident?", group: "Topic", color: "red" },
+        { id: "Terrorist attack", group: "Narrative", color: "blue" },
+        { id: "Drunk or impaired driver", group: "Narrative", color: "blue" },
+        { id: "Arrested driver and aftermath", group: "Narrative", color: "blue" },
+        { id: "Car crashes in restaurant. Hypothesis of terrorist attack", group: "Post", color: "white" },
+        { id: "Terrorists crash a car in restaurant in Paris.", group: "Post", color: "white" },
+        { id: "Breaking: Authorities suspect the car crash in the restaurant may be linked to terrorism. Investigation ongoing.", group: "Post", color: "white" },
+        { id: "Another tragic day in Paris as a suspected terrorist attack leaves diners terrified. #ParisAttack", group: "Post", color: "white" },
+        { id: "The effect of drunk driving. A drunked driver crashes a car into a restaurant.", group: "Post", color: "white" },
+        { id: "Car crashes in restaurant. 2 killed by drugs man! Not a terrorist attack.", group: "Post", color: "white" },
+        { id: "Man under the influence of drugs and alcohol crashes a car into a restaurant.", group: "Post", color: "white" },
+        { id: "Terrible accident: A driver under the influence plows into a Parisian restaurant, leaving victims in shock.", group: "Post", color: "white" },
+        { id: "Police confirm no terrorism involved in the Paris restaurant crash. Driver arrested for driving under drugs and alcohol.", group: "Post", color: "white" },
+        { id: "Confirmed: Paris restaurant crash caused by impaired driver. A tragedy, but not terrorism.", group: "Post", color: "white" },
+        { id: "Witnesses claim the driver seemed disoriented before crashing into the restaurant terrace.", group: "Post", color: "white" },
+        { id: "Initial fears of a terrorist attack dismissed. Officials report a drunk driver caused the crash.", group: "Post", color: "white" },
+        { id: "Victims, driver arrested...What we know after a driver went to the terrace of a restaurant in Paris https://t.co/FL2UasNk1s via @BFMParis.", group: "Post", color: "white" },
+        { id: "Driver in custody after crashing into a Paris restaurant. Could it have been prevented? Updates here: https://t.co/updates.", group: "Post", color: "white" },
+        { id: "Two killed in Paris restaurant crash: drunk driving or deliberate attack? #ParisNews.", group: "Post", color: "white" },
+      ],
+      links: [
+        { source: "The debate rages on: was the Paris restaurant crash an attack or a tragic accident?", target: "Terrorist attack" },
+        { source: "The debate rages on: was the Paris restaurant crash an attack or a tragic accident?", target: "Drunk or impaired driver" },
+        { source: "The debate rages on: was the Paris restaurant crash an attack or a tragic accident?", target: "Arrested driver and aftermath" },
+        { source: "Terrorist attack", target: "Car crashes in restaurant. Hypothesis of terrorist attack" },
+        { source: "Terrorist attack", target: "Terrorists crash a car in restaurant in Paris." },
+        { source: "Terrorist attack", target: "Breaking: Authorities suspect the car crash in the restaurant may be linked to terrorism. Investigation ongoing." },
+        { source: "Terrorist attack", target: "Another tragic day in Paris as a suspected terrorist attack leaves diners terrified. #ParisAttack" },
+        { source: "Drunk or impaired driver", target: "The effect of drunk driving. A drunked driver crashes a car into a restaurant." },
+        { source: "Drunk or impaired driver", target: "Car crashes in restaurant. 2 killed by drugs man! Not a terrorist attack." },
+        { source: "Drunk or impaired driver", target: "Man under the influence of drugs and alcohol crashes a car into a restaurant." },
+        { source: "Drunk or impaired driver", target: "Terrible accident: A driver under the influence plows into a Parisian restaurant, leaving victims in shock." },
+        { source: "Drunk or impaired driver", target: "Police confirm no terrorism involved in the Paris restaurant crash. Driver arrested for driving under drugs and alcohol." },
+        { source: "Drunk or impaired driver", target: "Confirmed: Paris restaurant crash caused by impaired driver. A tragedy, but not terrorism." },
+        { source: "Drunk or impaired driver", target: "Witnesses claim the driver seemed disoriented before crashing into the restaurant terrace." },
+        { source: "Drunk or impaired driver", target: "Initial fears of a terrorist attack dismissed. Officials report a drunk driver caused the crash." },
+        { source: "Arrested driver and aftermath", target: "Victims, driver arrested...What we know after a driver went to the terrace of a restaurant in Paris https://t.co/FL2UasNk1s via @BFMParis." },
+        { source: "Arrested driver and aftermath", target: "Driver in custody after crashing into a Paris restaurant. Could it have been prevented? Updates here: https://t.co/updates." },
+        { source: "Arrested driver and aftermath", target: "Two killed in Paris restaurant crash: drunk driving or deliberate attack? #ParisNews." },
+      ],
+    };
+
+    // Initialize 3D force graph
+    const Graph = ForceGraph3D()(document.body)
+      .graphData(data)
+      .nodeAutoColorBy('group')
+      .nodeColor(node => node.color)
+      .nodeLabel(node => node.id)
+      .linkDirectionalParticles(2)
+      .linkDirectionalParticleSpeed(0.005)
+      .width(window.innerWidth)
+      .height(window.innerHeight);
+  </script>
+</body>
+</html>

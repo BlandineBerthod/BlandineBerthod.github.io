@@ -1,0 +1,32 @@
+<head>
+  <style>
+    body { margin: 0; }
+  </style>
+  <script src="//unpkg.com/3d-force-graph"></script>
+</head>
+
+<body>
+  <div id="3d-graph" style="width: 100vw; height: 100vh;"></div>
+
+  <script type="module">
+    import SpriteText from "https://esm.sh/three-spritetext";
+
+    const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
+        .jsonUrl('./data.json')
+        .nodeAutoColorBy('group')
+        .nodeThreeObject(node => {
+          const sprite = new SpriteText(node.id);
+          sprite.material.depthWrite = false; // make sprite background transparent
+          sprite.color = node.color;
+          sprite.textHeight = 8; // Adjust text height
+          return sprite;
+        });
+
+    // Spread nodes a little wider
+    Graph.d3Force('charge').strength(-300); // Increase repulsion between nodes
+    Graph.d3Force('link').distance(100); // Adjust link distance for more spacing
+
+    // Optionally, tweak gravity to make the graph sparser
+    Graph.d3Force('center').strength(0.05);
+  </script>
+</body>
