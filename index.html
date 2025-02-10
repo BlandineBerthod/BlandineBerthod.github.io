@@ -12,46 +12,6 @@
       background-color: #121212;
       float: right; /* Push the graph to the right */
     }
-
-    /* Video container */
-    #video-container {
-      position: absolute;
-      bottom: 15px; /* Distance from the bottom */
-      left: 15px; /* Distance from the left */
-      width: 800px; /* Larger video width */
-      height: auto;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-      border-radius: 30px;
-      background: #000;
-      z-index: 10;
-    }
-
-    /* Style for the video */
-    #video-container video {
-      width: 100%;
-      height: auto;
-    }
-
-    /* Sound consent button */
-    #sound-consent {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      width: calc(100% - 20px);
-      text-align: center;
-      z-index: 20;
-    }
-
-    #sound-consent button {
-      padding: 15px 25px;
-      background-color: #00bcd4;
-      border: none;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
   </style>
   <script src="//unpkg.com/3d-force-graph"></script>
 </head>
@@ -59,17 +19,6 @@
 <body>
   <!-- Graph container -->
   <div id="3d-graph"></div>
-
-  <!-- Video container -->
-  <div id="video-container">
-    <video id="my-video" autoplay loop muted>
-      <source src="./Video.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <div id="sound-consent">
-      <button id="enable-sound">Enable Sound</button>
-    </div>
-  </div>
 
   <script type="module">
     import SpriteText from "https://esm.sh/three-spritetext";
@@ -108,15 +57,5 @@
       );
       requestAnimationFrame(animate); // Loop animation
     })();
-
-    // Enable sound button
-    const video = document.getElementById('my-video');
-    const enableSoundButton = document.getElementById('enable-sound');
-    const soundConsent = document.getElementById('sound-consent');
-
-    enableSoundButton.addEventListener('click', () => {
-      video.muted = false; // Unmute video
-      soundConsent.style.display = 'none'; // Hide consent button
-    });
   </script>
 </body>
